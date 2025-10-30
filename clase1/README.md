@@ -11,15 +11,15 @@
 
 **Java**
 
-![java](screenshots\java.png)
+![java](screenshots/java.png)
 
 **Gradle**
 
-![gradle](screenshots\gradle.png)
+![gradle](screenshots/gradle.png)
 
 GIT
 
-![git](screenshots\git.png)
+![git](screenshots/git.png)
 
 
 
@@ -52,20 +52,17 @@ Aqui Gradle coloca todos los archivos generados automáticamente durante la cons
 ./gradlew bootRun
 ```
 
-![run](D:\cp_2025\curso-springboot-kafka\clase1\screenshots\captura1.png)
+![run](screenshots/captura1.png)
 
 ## Dependencias Principales
 
 Lista las dependencias en `build.gradle` y explica brevemente cada una:
-- spring-boot-starter-web: [Tu explicación]
-- spring-boot-starter-test: [Tu explicación]
+- implementation 'org.springframework.boot:spring-boot-starter-web'
+  - Incluye lo necesario para construir aplicaciones RESTful con Spring, Tomcat 
 
-## Conceptos Aprendidos
+- testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  - Incluye las dependencias para realizar pruebas unitarias 
 
-- ¿Qué es Spring Boot?
-- ¿Qué es Maven?
-- ¿Qué significa "Tomcat started on port 8080"?
-- ¿Para qué sirve la anotación @SpringBootApplication?
 
 ## Autor
-Tu Nombre - Curso Spring Boot & Kafka
+Daniel Zerain - Curso Spring Boot & Kafka
