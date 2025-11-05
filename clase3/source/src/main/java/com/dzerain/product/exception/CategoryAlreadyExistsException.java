@@ -1,0 +1,7 @@
+package com.dzerain.product.exception;
+
+public class CategoryAlreadyExistsException extends RuntimeException{
+    public CategoryAlreadyExistsException(String name) {
+        super("La categoría " + name + " ya existe");
+    }
+}
