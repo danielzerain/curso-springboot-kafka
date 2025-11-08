@@ -4,6 +4,8 @@ import com.dzerain.product.dto.ProductRequest;
 import com.dzerain.product.dto.ProductResponse;
 import com.dzerain.product.dto.ProductSummaryResponse;
 import com.dzerain.product.exception.ResourceNotFoundException;
+import com.dzerain.product.kafka.event.ProductCreatedEvent;
+import com.dzerain.product.kafka.producer.ProductEventProducer;
 import com.dzerain.product.mapper.ProductMapper;
 import com.dzerain.product.model.Category;
 import com.dzerain.product.model.Product;
@@ -19,10 +21,15 @@ public class ProductService {
 
   private final ProductRepository repository;
   private final CategoryRepository categoryRepository;
+  private final ProductEventProducer productEventProducer;
 
-  public ProductService(ProductRepository repository, CategoryRepository categoryRepository) {
+  public ProductService(
+      ProductRepository repository,
+      CategoryRepository categoryRepository,
+      ProductEventProducer productEventProducer) {
     this.repository = repository;
     this.categoryRepository = categoryRepository;
+    this.productEventProducer = productEventProducer;
   }
 
   public List<ProductResponse> findAll(String name) {
@@ -52,6 +59,15 @@ public class ProductService {
 
     Product product = new Product();
     Product saved = repository.save(ProductMapper.toEntity(request, product, category));
+    ProductCreatedEvent event =
+        new ProductCreatedEvent(
+            saved.getId(),
+            saved.getName(),
+            saved.getDescription(),
+            saved.getPrice(),
+            saved.getCategory().getId());
+    productEventProducer.publishProductCreated(event);
+
     return ProductMapper.toResponse(saved);
   }
 
