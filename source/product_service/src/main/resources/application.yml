@@ -1,9 +1,11 @@
+server:
+  port: ${SERVER_PORT:8000}
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/ecommerce
-    username: product_user
-    password: product_password
+    url: jdbc:postgresql://localhost:5432/ecommerce_products
+    username: ecommerce_user
+    password: ecommerce_password
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,7 +16,7 @@ spring:
   messages:
     basename: ValidationMessages
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 127.0.0.1:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -22,4 +24,4 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: DEBUG
+    org.hibernate.SQL: INFO
