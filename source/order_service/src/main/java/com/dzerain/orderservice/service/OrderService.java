@@ -21,17 +21,16 @@ public class OrderService {
 
   private static final Logger log = LoggerFactory.getLogger(OrderEventConsumer.class);
   private final OrderRepository orderRepository;
-  private final OrderEventProducer orderEventProducer; // Nuevo
+  private final OrderEventProducer orderEventProducer;
 
   public OrderService(
-      OrderRepository orderRepository, OrderEventProducer orderEventProducer) { // Nuevo
+      OrderRepository orderRepository, OrderEventProducer orderEventProducer) {
     this.orderRepository = orderRepository;
-    this.orderEventProducer = orderEventProducer; // Nuevo
+    this.orderEventProducer = orderEventProducer;
   }
 
   @Transactional
   public OrderResponse create(OrderRequest request) {
-    // 1. Crear y guardar orden
     Order order = new Order();
     order.setProductId(request.productId());
     order.setQuantity(request.quantity());
@@ -41,7 +40,6 @@ public class OrderService {
 
     Order saved = orderRepository.save(order);
 
-    // 2. Publicar evento a Kafka
     OrderPlacedEvent event =
         new OrderPlacedEvent(
             saved.getId(),
@@ -52,11 +50,9 @@ public class OrderService {
             saved.getTotalAmount());
     orderEventProducer.publishOrderPlaced(event);
 
-    // 3. Retornar respuesta
     return mapToResponse(saved);
   }
 
-  // Resto de métodos sin cambios...
   @Transactional(readOnly = true)
   public List<OrderResponse> findAll() {
     return orderRepository.findAll().stream().map(this::mapToResponse).collect(Collectors.toList());
@@ -68,15 +64,9 @@ public class OrderService {
         orderRepository
             .findById(id)
             .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
-    // Nota: En producción, crear OrderNotFoundException extends RuntimeException
-    // Ver Clase 3 para manejo de excepciones con @ControllerAdvice
     return mapToResponse(order);
   }
 
-  /**
-   * Confirma una orden (actualiza estado de PENDING a CONFIRMED) Llamado cuando inventory-service
-   * confirma que hay stock
-   */
   @Transactional
   public void confirmOrder(Long orderId) {
     log.info("Confirming order: orderId={}", orderId);
@@ -86,26 +76,19 @@ public class OrderService {
             .findById(orderId)
             .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
 
-    // Verificar que la orden está en estado PENDING
     if (order.getStatus() != OrderStatus.PENDING) {
       log.warn(
           "Order is not PENDING, cannot confirm: orderId={}, currentStatus={}",
           orderId,
           order.getStatus());
-      return; // Idempotencia: Si ya fue procesada, no hacer nada
+      return;
     }
-
-    // Actualizar estado
     order.setStatus(OrderStatus.CONFIRMED);
     orderRepository.save(order);
 
     log.info("Order confirmed: orderId={}, newStatus={}", orderId, order.getStatus());
   }
 
-  /**
-   * Cancela una orden (actualiza estado de PENDING a CANCELLED) Llamado cuando inventory-service
-   * rechaza la orden por falta de stock
-   */
   @Transactional
   public void cancelOrder(Long orderId, String reason) {
     log.info("Cancelling order: orderId={}, reason={}", orderId, reason);
@@ -115,16 +98,14 @@ public class OrderService {
             .findById(orderId)
             .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
 
-    // Verificar que la orden está en estado PENDING
     if (order.getStatus() != OrderStatus.PENDING) {
       log.warn(
           "Order is not PENDING, cannot cancel: orderId={}, currentStatus={}",
           orderId,
           order.getStatus());
-      return; // Idempotencia: Si ya fue procesada, no hacer nada
+      return;
     }
 
-    // Actualizar estado y guardar razón de cancelación
     order.setStatus(OrderStatus.CANCELLED);
     order.setCancellationReason(reason);
     orderRepository.save(order);

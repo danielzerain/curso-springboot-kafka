@@ -59,6 +59,7 @@ public class ProductService {
 
     Product product = new Product();
     Product saved = repository.save(ProductMapper.toEntity(request, product, category));
+
     ProductCreatedEvent event =
         new ProductCreatedEvent(
             saved.getId(),

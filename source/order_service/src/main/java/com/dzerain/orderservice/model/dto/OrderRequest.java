@@ -24,4 +24,5 @@ public record OrderRequest(
     @NotNull(message = "El monto total es requerido")
     @Positive(message = "El monto total debe ser positivo")
     BigDecimal totalAmount
+
 ) {}

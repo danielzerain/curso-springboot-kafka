@@ -14,7 +14,6 @@ public class OrderPlacedEvent {
     private Instant timestamp;
 
     public OrderPlacedEvent() {
-        // Constructor vacío para deserialización JSON
     }
 
     public OrderPlacedEvent(Long orderId, Long productId, Integer quantity,
@@ -29,7 +28,6 @@ public class OrderPlacedEvent {
         this.timestamp = Instant.now();
     }
 
-    // Getters y Setters
     public Long getOrderId() {
         return orderId;
     }

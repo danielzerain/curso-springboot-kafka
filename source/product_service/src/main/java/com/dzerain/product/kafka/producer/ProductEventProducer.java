@@ -9,31 +9,38 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductEventProducer {
 
-    private static final Logger log = LoggerFactory.getLogger(ProductEventProducer.class);
-    private static final String TOPIC = "ecommerce.products.created";
+  private static final Logger log = LoggerFactory.getLogger(ProductEventProducer.class);
+  private static final String TOPIC = "ecommerce.products.created";
 
-    private final KafkaTemplate<String, ProductCreatedEvent> kafkaTemplate;
+  private final KafkaTemplate<String, ProductCreatedEvent> kafkaTemplate;
 
-    public ProductEventProducer(KafkaTemplate<String, ProductCreatedEvent> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
+  public ProductEventProducer(KafkaTemplate<String, ProductCreatedEvent> kafkaTemplate) {
+    this.kafkaTemplate = kafkaTemplate;
+  }
 
-    public void publishProductCreated(ProductCreatedEvent event) {
-        String key = event.getProductId().toString();
+  public void publishProductCreated(ProductCreatedEvent event) {
+    String key = event.getProductId().toString();
 
-        log.info("Publishing ProductCreatedEvent: productId={}, name={}",
-                event.getProductId(), event.getName());
+    log.info(
+        "Publishing ProductCreatedEvent: productId={}, name={}",
+        event.getProductId(),
+        event.getName());
 
-        kafkaTemplate.send(TOPIC, key, event)
-                .whenComplete((result, ex) -> {
-                    if (ex != null) {
-                        log.error("Failed to publish ProductCreatedEvent: productId={}",
-                                event.getProductId(), ex);
-                    } else {
-                        log.info("ProductCreatedEvent published successfully: productId={}, partition={}",
-                                event.getProductId(),
-                                result.getRecordMetadata().partition());
-                    }
-                });
-    }
+    kafkaTemplate
+        .send(TOPIC, key, event)
+        .whenComplete(
+            (result, ex) -> {
+              if (ex != null) {
+                log.error(
+                    "Failed to publish ProductCreatedEvent: productId={}",
+                    event.getProductId(),
+                    ex);
+              } else {
+                log.info(
+                    "ProductCreatedEvent published successfully: productId={}, partition={}",
+                    event.getProductId(),
+                    result.getRecordMetadata().partition());
+              }
+            });
+  }
 }

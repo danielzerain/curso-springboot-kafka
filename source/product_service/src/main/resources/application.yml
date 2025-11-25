@@ -20,7 +20,9 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
+      properties:
+        spring.json.type.mapping: productCreatedEvent:com.dzerain.product.kafka.event.ProductCreatedEvent
+        spring.json.trusted.packages: "*"
 
 logging:
   level:

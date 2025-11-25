@@ -11,11 +11,9 @@ public class OrderCancelledEvent {
     private String reason;
     private Instant timestamp;
 
-    // Constructor vacío (REQUERIDO para deserialización)
     public OrderCancelledEvent() {
     }
 
-    // Constructor completo
     public OrderCancelledEvent(Long orderId, Long productId, Integer requestedQuantity,
                                Integer availableStock, String reason) {
         this.orderId = orderId;
@@ -25,8 +23,6 @@ public class OrderCancelledEvent {
         this.reason = reason;
         this.timestamp = Instant.now();
     }
-
-    // Getters y Setters
 
     public Long getOrderId() {
         return orderId;

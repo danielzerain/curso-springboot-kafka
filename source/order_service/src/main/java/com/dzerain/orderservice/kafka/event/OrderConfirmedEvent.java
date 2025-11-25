@@ -11,11 +11,9 @@ public class OrderConfirmedEvent {
     private Integer reservedStockAfterReservation;
     private Instant timestamp;
 
-    // Constructor vacío (REQUERIDO para deserialización)
     public OrderConfirmedEvent() {
     }
 
-    // Constructor completo
     public OrderConfirmedEvent(Long orderId, Long productId, Integer quantity,
                                Integer availableStockAfterReservation,
                                Integer reservedStockAfterReservation) {
@@ -26,8 +24,6 @@ public class OrderConfirmedEvent {
         this.reservedStockAfterReservation = reservedStockAfterReservation;
         this.timestamp = Instant.now();
     }
-
-    // Getters y Setters
 
     public Long getOrderId() {
         return orderId;
