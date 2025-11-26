@@ -1,15 +1,15 @@
-package com.dzerain.inventoryservice.config;
+package com.dzerain.product.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.servers.Server;
+import java.util.List;
+
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 @Configuration
 public class OpenApiConfig {
@@ -18,7 +18,7 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API de Inventario de Productos")
+                        .title("API de Productos")
                         .version("1.0.0")
                         .description("Documentación de la API para el sistema de ecommerce.")
                         .termsOfService("http://swagger.io/terms/")
@@ -30,14 +30,20 @@ public class OpenApiConfig {
                                 .name("Apache 2.0")
                                 .url("http://springdoc.org")))
                 .servers(List.of(
-                        new Server().url("http://localhost:8002").description("Servidor Local")
+                        new Server().url("http://localhost:8000").description("Servidor Local")
                 ));
     }
 
     @Bean
-    public GroupedOpenApi inventoryApi() {
-        return GroupedOpenApi.builder().group("Inventario").pathsToMatch("/api/inventory/**").build();
+    public GroupedOpenApi productApi() {
+        return GroupedOpenApi.builder().group("Categorias").pathsToMatch("/api/categories/**").build();
     }
+
+    @Bean
+    public GroupedOpenApi categoryApi() {
+        return GroupedOpenApi.builder().group("Productos").pathsToMatch("/api/products/**").build();
+    }
+
 
 
 }

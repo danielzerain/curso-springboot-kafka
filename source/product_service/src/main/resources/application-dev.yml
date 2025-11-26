@@ -1,12 +1,5 @@
 server:
-  port: ${SERVER_PORT:8000}
-
-info:
-  app:
-    name: product-service
-    description: Servicio de Administracion de productos
-    version: 1.0.0
-  java-vendor: ${java.specification.vendor}
+  port: 8000
 
 spring:
   datasource:

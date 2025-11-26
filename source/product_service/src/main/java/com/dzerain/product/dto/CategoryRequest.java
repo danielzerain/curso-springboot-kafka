@@ -4,4 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record CategoryRequest(
-    @NotBlank @Size(max = 80) String name, @Size(max = 255) String description) {}
+    @NotBlank(message = "{category.name.notblank}")
+        @Size(max = 80, message = "{category.name.maxsize}")
+        String name,
+    @Size(max = 255, message = "{category.description.maxsize}") String description) {}

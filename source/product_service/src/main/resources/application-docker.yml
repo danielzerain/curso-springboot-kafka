@@ -1,13 +1,6 @@
 server:
   port: ${SERVER_PORT:8000}
 
-info:
-  app:
-    name: product-service
-    description: Servicio de Administracion de productos
-    version: 1.0.0
-  java-vendor: ${java.specification.vendor}
-
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/ecommerce_products
