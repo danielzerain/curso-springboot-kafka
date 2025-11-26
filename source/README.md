@@ -1,10 +1,78 @@
 # Proyecto Final · E-commerce con Spring Boot y Kafka
 
 **Alumno:** Daniel Zerain Medinaceli
+
 **Fecha:** 26/11/2025
+
 **Curso:** Spring Boot & Apache Kafka: Desarrollo de Microservicios y Mensajería en Tiempo Real- i-Quattro
 
 ## Arquitectura y estructura
+
+### Requerimientos de Infraestructura
+
+Previamente deberan levantar los contenedores de docker de Postgresql y de Kafka, en la carpeta [infraestructure](infraestructure/server/docker-compose.yml) encontrara el archivo docker-compose
+
+Una vez se situe en la carpeta debera ejecutar el comando
+
+```bash
+docker compose up -d
+```
+
+Para terminar la configuracion de Kafka dirijase a la seccion [Kafka](#integracion-kafka)
+
+
+### Compilacion y ejecucion
+
+Se utilizo Gradle para la construccion, compilacion y ejecucion de los servicios, para su ejecucion se utilizaron los siguientes comando:
+
+```bash
+./gradlew bootRun --args='--spring.profiles.active=dev'
+```
+
+> En el comando se ve que se utiliza ***spring.profiles.active=dev***, con este argumento se define el profile con el que iniciara el servicio, en este ejemplo se inicia con el profile de dev
+
+Los servicios se iniciaran mostrando el siguiente registro
+
+![run](screenshots/runservice.png)
+
+Adicionalmente se habilita la generacion de imagenes para Docker para si du despliegue en contenedores
+
+```bash
+ docker build -t danielzerain/order_service:v.1.0.0 .
+```
+
+En el docker-compose debera establecer el profile=docker y crear archivos .env con la configuracion
+
+```bash
+services:
+  order_service:
+    container_name: order_service
+    image: "danielzerain/order_service:v.1.0.0"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JAVA_OPTS: "-Xms256m -Xmx512m -XX:MaxMetaspaceSize=128m"
+    ports:
+      - 8001:8001
+    env_file:
+      - .env_order
+    networks:
+      - cursoksb_network
+```
+
+El archivo .env_order debera tener los valores
+
+```bashSERVER_PORT=8001
+DB_HOST=ecommerce-db
+DB_PORT=5432
+DB_NAME=ecommerce_orders
+DB_USER=ecommerce_user
+DB_PASSWORD=ecommerce_password
+DLL-AUTO=update
+JPA_SHOW_SQL=false
+KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+```
+
+### Microservicios
 
 Se crearon 3 Microservicios para la gestion de las ordenes generadas en el Ecommerce, cada una conectada a su propia base de datos, se gestiona el bus de eventos con  Apache Kafka
 
@@ -86,7 +154,7 @@ Se muestra la secuencia que sigue el proceso principal de este servicio que es l
 
 ![alt text](screenshots/cp12.png)
 
-- Verificacion de orden Orden
+- Verificacion de Orden
 
 ![alt text](screenshots/cp13.png)
 
@@ -110,8 +178,39 @@ Para todos los request se valida la informacion requerida, mostrando los mensaje
 
 ![alt text](screenshots/cperr2.png)
 
+## Coleccion de Postman
+
+La coleccion de postman actualizada puede descargarse desde: [postman](postman/postman_collection.json)
 
 ## Integracion Kafka
+
+Apache Kafka se despliega en un contenedor, el docker-compose.yml debera tener la siguiente configuracion:
+
+```bash
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+    volumes:
+      - ./kafka-data:/var/lib/kafka/data
+    networks:
+      - cursoksb_network
+```
 
 Todos los microservicios se conectan a Kafka para consumir y producir enventos, una vez levantada la instancia de kafka en docker, se deben crear los topicos, para esto se utilizo el cliente de kakfa y se ejecutaron los siguientes comandos:
 
@@ -159,7 +258,7 @@ cuando se consumen los servicios se generar los eventos en kafka, como se muestr
 
 ## Base de datos
 
-Se utiliza 1 base de datos para cada servicio, las mismas fueron creadas en la careacion del contenedor de docker
+Se utiliza 1 base de datos para cada servicio, las mismas fueron creadas en la creacion del contenedor de docker
 
 ![alt text](screenshots/docker_pg.png)
 
@@ -172,25 +271,21 @@ set -e
 set -u
 
 function create_user_and_database() {
-	local database=$1
-	echo "  Creando base de datos '$database'"
-	psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-	    SELECT 'CREATE DATABASE $database'
-	    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '$database')\gexec
+    local database=$1
+    echo "  Creando base de datos '$database'"
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+        SELECT 'CREATE DATABASE $database'
+        WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '$database')\gexec
 EOSQL
 }
 
 if [ -n "$POSTGRES_MULTIPLE_DATABASES" ]; then
-	echo "Solicitud de creación de múltiples bases de datos: $POSTGRES_MULTIPLE_DATABASES"
-	for db in $(echo $POSTGRES_MULTIPLE_DATABASES | tr ',' ' '); do
-		create_user_and_database $db
-	done
-	echo "Bases de datos creadas exitosamente"
+    echo "Solicitud de creación de múltiples bases de datos: $POSTGRES_MULTIPLE_DATABASES"
+    for db in $(echo $POSTGRES_MULTIPLE_DATABASES | tr ',' ' '); do
+        create_user_and_database $db
+    done
+    echo "Bases de datos creadas exitosamente"
 fi
-
-echo "host all all 0.0.0.0/0 scram-sha-256" >> "$PGDATA/pg_hba.conf"
-
-echo "Reglas de pg_hba.conf actualizadas"
 ```
 
 ![alt text](screenshots/cp03.png)
@@ -215,7 +310,24 @@ Se tienen las siguientes bases de datos
 
 ![alt text](screenshots/ent3.png)
 
-
-## Configuracion
-
 ## Documentacion API
+
+Se habilito la documentacion de las API con Swagger una vez que los servicios se encuentres arriba podran accederse desde las siguientes url:
+
+**ecommerce_inventory**
+
+> http://localhost:8002/swagger-ui/index.html
+
+![swi](screenshots/sw_1.png)
+
+**ecommerce_orders**
+
+> http://localhost:8001/swagger-ui/index.html
+
+![swo](screenshots/sw_2.png)
+
+**ecommerce_products**
+
+> http://localhost:8000/swagger-ui/index.html
+
+![swp](screenshots/sw_3.png)
