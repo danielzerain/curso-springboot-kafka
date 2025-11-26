@@ -1,4 +1,4 @@
-package com.dzerain.product.dto;
+package com.dzerain.product.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

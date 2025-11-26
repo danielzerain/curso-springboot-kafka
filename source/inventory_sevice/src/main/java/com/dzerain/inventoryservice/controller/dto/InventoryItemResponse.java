@@ -1,4 +1,4 @@
-package com.dzerain.inventoryservice.model.dto;
+package com.dzerain.inventoryservice.controller.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

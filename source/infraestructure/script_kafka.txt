@@ -1,0 +1,7 @@
+kafka-topics --bootstrap-server localhost:9092 --create --topic ecommerce.products.created  --partitions 5  --replication-factor 1
+  
+kafka-topics --bootstrap-server localhost:9092 --create --topic ecommerce.orders.placed  --partitions 5  --replication-factor 1
+
+kafka-topics --bootstrap-server localhost:9092 --create --topic ecommerce.orders.confirmed --partitions 5  --replication-factor 1
+
+kafka-topics --bootstrap-server localhost:9092 --create --topic ecommerce.orders.cancelled --partitions 5  --replication-factor 1

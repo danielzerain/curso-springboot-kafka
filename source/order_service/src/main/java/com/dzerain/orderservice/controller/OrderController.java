@@ -1,8 +1,8 @@
 package com.dzerain.orderservice.controller;
 
 import com.dzerain.orderservice.common.DocsText;
-import com.dzerain.orderservice.model.dto.OrderRequest;
-import com.dzerain.orderservice.model.dto.OrderResponse;
+import com.dzerain.orderservice.controller.dto.OrderRequest;
+import com.dzerain.orderservice.controller.dto.OrderResponse;
 import com.dzerain.orderservice.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

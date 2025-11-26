@@ -1,4 +1,4 @@
-package com.dzerain.orderservice.model.dto;
+package com.dzerain.orderservice.controller.dto;
 
 import com.dzerain.orderservice.model.entity.OrderStatus;
 import java.math.BigDecimal;

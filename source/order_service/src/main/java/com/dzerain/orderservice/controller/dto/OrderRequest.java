@@ -1,4 +1,4 @@
-package com.dzerain.orderservice.model.dto;
+package com.dzerain.orderservice.controller.dto;
 
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;

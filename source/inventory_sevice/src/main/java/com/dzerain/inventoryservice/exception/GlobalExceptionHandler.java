@@ -1,6 +1,6 @@
 package com.dzerain.inventoryservice.exception;
 
-import com.dzerain.inventoryservice.model.dto.ErrorResponse;
+import com.dzerain.inventoryservice.controller.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.stream.Collectors;

@@ -27,12 +27,13 @@ services:
     image: postgres:15-alpine
     container_name: ecommerce-db
     environment:
-      POSTGRES_DB: ecommerce
       POSTGRES_USER: ecommerce_user
       POSTGRES_PASSWORD: ecommerce_password
+      POSTGRES_MULTIPLE_DATABASES: ecommerce_inventory,ecommerce_orders,ecommerce_products
     ports:
       - "5432:5432"
     volumes:
+      - ./dataset:/docker-entrypoint-initdb.d
       - ./postgres-data:/var/lib/postgresql/data
     networks:
       - cursoksb_network

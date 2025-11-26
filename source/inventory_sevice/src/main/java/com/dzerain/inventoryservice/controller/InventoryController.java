@@ -1,8 +1,8 @@
 package com.dzerain.inventoryservice.controller;
 
 import com.dzerain.inventoryservice.common.DocsText;
-import com.dzerain.inventoryservice.model.dto.InventoryItemRequest;
-import com.dzerain.inventoryservice.model.dto.InventoryItemResponse;
+import com.dzerain.inventoryservice.controller.dto.InventoryItemRequest;
+import com.dzerain.inventoryservice.controller.dto.InventoryItemResponse;
 import com.dzerain.inventoryservice.service.InventoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

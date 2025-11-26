@@ -41,8 +41,6 @@ spring:
 logging:
   level:
     org.hibernate.SQL: INFO
-    com.dzerain.orderservice: DEBUG
-    org.springframework.web: DEBUG
 
 management:
   endpoints:

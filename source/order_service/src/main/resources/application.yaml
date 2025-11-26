@@ -11,6 +11,8 @@ info:
 spring:
   application:
     name: orderservice
+  profiles:
+    active: dev
   datasource:
     url: jdbc:postgresql://localhost:5432/ecommerce_orders
     username: ecommerce_user

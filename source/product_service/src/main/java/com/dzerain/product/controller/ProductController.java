@@ -1,10 +1,9 @@
 package com.dzerain.product.controller;
 
 import com.dzerain.product.common.DocsText;
-import com.dzerain.product.dto.CategoryResponse;
-import com.dzerain.product.dto.ProductRequest;
-import com.dzerain.product.dto.ProductResponse;
-import com.dzerain.product.dto.ProductSummaryResponse;
+import com.dzerain.product.controller.dto.ProductRequest;
+import com.dzerain.product.controller.dto.ProductResponse;
+import com.dzerain.product.controller.dto.ProductSummaryResponse;
 import com.dzerain.product.service.ProductService;
 import java.util.List;
 

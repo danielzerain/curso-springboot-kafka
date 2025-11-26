@@ -1,4 +1,4 @@
-package com.dzerain.inventoryservice.model.dto;
+package com.dzerain.inventoryservice.controller.dto;
 
 import java.time.Instant;
 import org.springframework.http.HttpStatus;

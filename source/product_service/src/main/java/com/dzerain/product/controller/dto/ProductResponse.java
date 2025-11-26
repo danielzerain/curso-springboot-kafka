@@ -1,4 +1,4 @@
-package com.dzerain.product.dto;
+package com.dzerain.product.controller.dto;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;

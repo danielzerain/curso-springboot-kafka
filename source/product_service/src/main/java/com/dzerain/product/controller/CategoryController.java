@@ -1,9 +1,9 @@
 package com.dzerain.product.controller;
 
 import com.dzerain.product.common.DocsText;
-import com.dzerain.product.dto.CategoryRequest;
-import com.dzerain.product.dto.CategoryResponse;
-import com.dzerain.product.dto.ProductResponse;
+import com.dzerain.product.controller.dto.CategoryRequest;
+import com.dzerain.product.controller.dto.CategoryResponse;
+import com.dzerain.product.controller.dto.ProductResponse;
 import com.dzerain.product.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

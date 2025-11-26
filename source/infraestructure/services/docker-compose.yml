@@ -1,0 +1,17 @@
+services:
+  order_service:
+    container_name: order_service
+    image: "danielzerain/order_service:v.1.0.0"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JAVA_OPTS: "-Xms256m -Xmx512m -XX:MaxMetaspaceSize=128m"
+    ports:
+      - 8001:8001
+    env_file:
+      - .env_order
+    networks:
+      - cursoksb_network
+
+networks:
+  cursoksb_network:
+    external: true

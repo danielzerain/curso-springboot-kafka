@@ -1,8 +1,8 @@
 package com.dzerain.product.mapper;
 
-import com.dzerain.product.dto.ProductRequest;
-import com.dzerain.product.dto.ProductResponse;
-import com.dzerain.product.dto.ProductSummaryResponse;
+import com.dzerain.product.controller.dto.ProductRequest;
+import com.dzerain.product.controller.dto.ProductResponse;
+import com.dzerain.product.controller.dto.ProductSummaryResponse;
 import com.dzerain.product.model.Category;
 import com.dzerain.product.model.Product;
 
