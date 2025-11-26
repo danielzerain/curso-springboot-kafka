@@ -9,6 +9,10 @@ info:
   java-vendor: ${java.specification.vendor}
 
 spring:
+  application:
+    name: product-service
+  profiles:
+    active: dev
   datasource:
     url: jdbc:postgresql://localhost:5432/ecommerce_products
     username: ecommerce_user
@@ -31,8 +35,7 @@ spring:
       properties:
         spring.json.type.mapping: productCreatedEvent:com.dzerain.product.kafka.event.ProductCreatedEvent
         spring.json.trusted.packages: "*"
-  application:
-    name: product-service
+
 
 logging:
   level:
