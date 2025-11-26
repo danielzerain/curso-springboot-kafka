@@ -182,6 +182,8 @@ Para todos los request se valida la informacion requerida, mostrando los mensaje
 
 La coleccion de postman actualizada puede descargarse desde: [postman](postman/postman_collection.json)
 
+Adicionalmente puede descargar la configuracion del enviroment de postman desde: [postman environment](postman/postman_environment.json)
+
 ## Integracion Kafka
 
 Apache Kafka se despliega en un contenedor, el docker-compose.yml debera tener la siguiente configuracion:
